@@ -16,9 +16,6 @@ J = 0;
 delta = X * theta - y;
 deltaSquare = delta .^2;
 J = sum(deltaSquare)/(2*m);
-J = sprintf("%.2f", J);
-
-
 
 % =========================================================================
 
