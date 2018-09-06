@@ -13,6 +13,9 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
+delta = X * theta - y;
+deltaSquare = delta .^2;
+J = sum(deltaSquare)/(2*m);
 
 
 
