@@ -84,6 +84,26 @@ J = sum(sum(-log(a3) .* y_labels - log(1 - a3).*(1 - y_labels))) / m;
 J =  J + lambda * (sum(sum(Theta1 .^2)) + sum(sum(Theta2 .^2))) / 2 / m;
 
 
+% backpropagation for gradient
+D2 = zeros(size(hidden_layer_size), num_labels);
+D1 = zeros(size(input_layer_size), hidden_layer_size);
+for t = 1:m
+    a1_t = a1(t, :);
+    z2_t = z2(t, :);
+    a2_t = a2(t, :);
+    z3_t = z3(t, :);
+    a3_t = a3(t, :);
+
+    delta3 = a3_t - y_labels(t, :);
+    delta2 = a2_t' * delta3 .* sigmoidGradient(z2_t);   % ======TODO====== %
+    D2 = D2 + delta3 * (a2_t)';
+    D1 = D1 + delta2 * (a1_t)';
+end
+
+Theta1_grad = D1 / m;
+Theta2_grad = D2 / m;
+    
+
 
 
 
