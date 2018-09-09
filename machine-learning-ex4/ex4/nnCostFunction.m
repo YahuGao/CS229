@@ -61,7 +61,27 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
+a1 = [ones(m, 1) X];   % 5000x401
+z2 = a1 * Theta1';     % 5000x401 * 401x25 ==> 5000x25
+a2 = sigmoid(z2);
+a2 = [ones(size(a2), 1) a2];       % 5000x26
+z3 = a2 * Theta2';                 % 5000x26 * 26x10 ==> 5000x10
+a3 = sigmoid(z3);                  % h(theta)  5000x10
 
+% Turn labels to vector
+labels_0 = eye(num_labels);
+y_labels = zeros(1, num_labels);
+for i = 1:m
+    y_labels = [y_labels; labels_0(y(i), :)];
+end
+y_labels = y_labels([2: end], :);
+
+% cost without regularization
+tmp = -a3 .* y_labels - log(1 - a3).*(1 - y_labels);
+J = sum(sum(-log(a3) .* y_labels - log(1 - a3).*(1 - y_labels))) / m;
+
+% Add regularization
+J =  J + lambda * (sum(sum(Theta1 .^2)) + sum(sum(Theta2 .^2))) / 2 / m;
 
 
 
