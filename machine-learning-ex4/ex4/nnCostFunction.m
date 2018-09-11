@@ -61,10 +61,10 @@ Theta2_grad = zeros(size(Theta2));
 %               the regularization separately and then add them to Theta1_grad
 %               and Theta2_grad from Part 2.
 %
-a1 = [ones(m, 1) X];   % 5000x401
+a1 = [ones(m, 1) X];   % add a(1)0 5000x401
 z2 = a1 * Theta1';     % 5000x401 * 401x25 ==> 5000x25
 a2 = sigmoid(z2);
-a2 = [ones(size(a2), 1) a2];       % 5000x26
+a2 = [ones(size(a2), 1) a2];       % add a(2)0 5000x26
 z3 = a2 * Theta2';                 % 5000x26 * 26x10 ==> 5000x10
 a3 = sigmoid(z3);                  % h(theta)  5000x10
 
@@ -81,13 +81,19 @@ tmp = -a3 .* y_labels - log(1 - a3).*(1 - y_labels);
 J = sum(sum(-log(a3) .* y_labels - log(1 - a3).*(1 - y_labels))) / m;
 
 % Add regularization
-J =  J + lambda * (sum(sum(Theta1 .^2)) + sum(sum(Theta2 .^2))) / 2 / m;
+J =  J + lambda * (sum(sum(Theta1(:,[2:end]) .^2)) + sum(sum(Theta2(:,[2:end]) .^2))) / 2 / m;
 
 
 % backpropagation for gradient
-D2 = zeros(size(hidden_layer_size), num_labels);
+D2 = zeros(num_labels, size(hidden_layer_size));
 D1 = zeros(size(input_layer_size), hidden_layer_size);
 for t = 1:m
+%    a1_t = X[1, :]';                     % a1  400x1
+%    a1_t = [1; a1];                      % a1  401x1
+%    z2_t = Theta1 * a1_t;                % 25x401 * 401x1 ==>25x1
+%    a2_t = sigmoid(z2_t);                % 25x1
+%    a2_t = [1; a2_t];                    % 26x1
+%    z3_t = Theta2 * a2_t;                % 10x26 * 26x1 ==>10x1 
     a1_t = a1(t, :)';					% 401x1
     z2_t = z2(t, :)';					% 25x1
     a2_t = a2(t, :)';					% 26x1
@@ -96,13 +102,13 @@ for t = 1:m
 
     delta3 = a3_t - y_labels(t, :)';	% 10x1
 	% Theta2' * delta3 .* g'(z2)
-    delta2 = Theta2' * delta3 .* sigmoidGradient(z2_t);   % 26x10 * 10x1 .* 25x1
-    D2 = D2 + delta3 * (a2_t)';
-    D1 = D1 + delta2 * (a1_t)';
+    delta2 = Theta2(:, [2:end])' * delta3 .* sigmoidGradient(z2_t);   % (10x25)' * 10x1 .* 25x1  ==> 25x1
+    Theta2_grad = Theta2_grad + delta3 * (a2_t)';
+    Theta1_grad = Theta1_grad + delta2 * (a1_t)';
 end
 
-Theta1_grad = D1 / m;
-Theta2_grad = D2 / m;
+Theta1_grad = Theta1_grad / m;
+Theta2_grad = Theta2_grad / m;
 
 
 
