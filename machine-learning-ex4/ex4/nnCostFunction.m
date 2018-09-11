@@ -88,35 +88,21 @@ J =  J + lambda * (sum(sum(Theta1 .^2)) + sum(sum(Theta2 .^2))) / 2 / m;
 D2 = zeros(size(hidden_layer_size), num_labels);
 D1 = zeros(size(input_layer_size), hidden_layer_size);
 for t = 1:m
-    a1_t = a1(t, :);
-    z2_t = z2(t, :);
-    a2_t = a2(t, :);
-    z3_t = z3(t, :);
-    a3_t = a3(t, :);
+    a1_t = a1(t, :)';					% 401x1
+    z2_t = z2(t, :)';					% 25x1
+    a2_t = a2(t, :)';					% 26x1
+    z3_t = z3(t, :)';					% 10x1
+    a3_t = a3(t, :)';					% 10x1
 
-    delta3 = a3_t - y_labels(t, :);
-    delta2 = a2_t' * delta3 .* sigmoidGradient(z2_t);   % ======TODO====== %
+    delta3 = a3_t - y_labels(t, :)';	% 10x1
+	% Theta2' * delta3 .* g'(z2)
+    delta2 = Theta2' * delta3 .* sigmoidGradient(z2_t);   % 26x10 * 10x1 .* 25x1
     D2 = D2 + delta3 * (a2_t)';
     D1 = D1 + delta2 * (a1_t)';
 end
 
 Theta1_grad = D1 / m;
 Theta2_grad = D2 / m;
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
