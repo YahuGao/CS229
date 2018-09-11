@@ -103,8 +103,8 @@ for t = 1:m
     delta3 = a3_t - y_labels(t, :)';	% 10x1
 	% Theta2' * delta3 .* g'(z2)
     delta2 = Theta2(:, [2:end])' * delta3 .* sigmoidGradient(z2_t);   % (10x25)' * 10x1 .* 25x1  ==> 25x1
-    Theta2_grad = Theta2_grad + delta3 * (a2_t)';
-    Theta1_grad = Theta1_grad + delta2 * (a1_t)';
+    Theta2_grad = Theta2_grad + delta3 * (a2_t)';           % 10x1 * 1x26 ==> 10x26
+    Theta1_grad = Theta1_grad + delta2 * (a1_t)';           % 25x1 * 1x401 ==> 25x401
 end
 
 Theta1_grad = Theta1_grad / m;
