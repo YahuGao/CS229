@@ -15,6 +15,8 @@ X_poly = zeros(numel(X), p);
 %
 % 
 for i = 1:p
+    % X_poly is initialized by zeros(numel(X), p)
+    % Can't use X_poly = [X_poly X_poly(:, 1) .^ i] here
     X_poly(:, i) = X.^i;
 end
 
