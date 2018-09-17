@@ -56,8 +56,11 @@ error_val   = zeros(m, 1);
 for i = 1:m
     x_train = X([1:i], :);
     y_train = y([1:i], :);
+    % different size of training set will get different theta
     theta = trainLinearReg(x_train, y_train, lambda);
+    % the training error should without lambda
     error_train(i) = linearRegCostFunction(x_train, y_train, theta, 0)(1);
+    % for validation error, always use the hole validation set and without lambda
     error_val(i) = linearRegCostFunction(Xval, yval, theta, 0)(1);
 
  end
