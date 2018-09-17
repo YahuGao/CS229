@@ -23,7 +23,8 @@ J = sum((X * theta - y) .^ 2) / 2 / m + lambda / 2 / m * sum(theta([2:end], :) .
 % grad without regularization
 % (mxn * nx1 - y) => Mx1 .* Mxn => sum(Mxn)/m => 1xn + (nx1)' => 1xn
 grad = sum((X * theta - y) .* X) / m + lambda * (theta)' / m;
-% regularize theta except theta0
+% regularize theta except theta0, remove the punishment of theta0
+% should use SUBTRACTION NOT ADD
 grad(1) = grad(1) - lambda * theta(1) / m;
 
 % =========================================================================
