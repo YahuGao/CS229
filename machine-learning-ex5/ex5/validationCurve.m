@@ -41,8 +41,11 @@ error_val = zeros(length(lambda_vec), 1);
 for i = 1:length(lambda_vec)
     lambda = lambda_vec(i);
     theta = trainLinearReg(X, y, lambda);
-    error_train(i) = linearRegCostFunction(X, y, theta, lambda)(1);
-    error_val(i) = linearRegCostFunction(Xval, yval, theta, lambda)(1);
+    % during check the effect of lambda for theta
+    % the lambda cannot used for calculate the cost
+    % this mean the errors are no regularized while do validation
+    error_train(i) = linearRegCostFunction(X, y, theta, 0)(1);
+    error_val(i) = linearRegCostFunction(Xval, yval, theta, 0)(1);
 
 end
 
