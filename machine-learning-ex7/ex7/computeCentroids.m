@@ -25,8 +25,15 @@ centroids = zeros(K, n);
 %
 % Note: You can use a for-loop over the centroids to compute this.
 %
-
-
+for i = 1:K
+    examples_k = find(idx == i);
+    centroid_sum = zeros(1, n);
+    for j = 1:length(examples_k)
+        centroid_sum = centroid_sum + X(examples_k(j), :);
+    end
+    len = length(examples_k);
+    centroids(i, :) = centroid_sum ./ len;
+end
 
 
 
